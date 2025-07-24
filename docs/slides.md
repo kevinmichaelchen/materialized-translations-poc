@@ -157,21 +157,21 @@ image: https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2940&aut
 
 Where IVMRs shine
 
-<div class="mt-4">
+<div class="text-sm">
 
-### Operational Dashboards
+**Operational Dashboards**  
 Real-time metrics without impacting production
 
-### Fraud Detection
+**Fraud Detection**  
 Instant pattern matching on transaction streams
 
-### Supply Chain Monitoring
+**Supply Chain Monitoring**  
 Track inventory and shipments in real-time
 
-### Business Intelligence
+**Business Intelligence**  
 Fresh analytics without the data warehouse lag
 
-### Customer 360 Views
+**Customer 360 Views**  
 Unified, always-current customer profiles
 
 </div>
