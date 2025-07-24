@@ -18,20 +18,7 @@ where:
 
 ## Architecture
 
-```
-┌─────────────────┐         CDC          ┌──────────────────┐
-│   PostgreSQL    │ ◄──────────────────► │   Materialize    │
-├─────────────────┤                      ├──────────────────┤
-│  Schema: pc     │                      │ Materialized View│
-│  - product      │                      │ - materialized_  │
-├─────────────────┤                      │   product        │
-│  Schema: i18n   │                      │                  │
-│  - localized_   │                      │ (Denormalized    │
-│    string       │                      │  with JSONB      │
-│  - translation  │                      │  translations)   │
-│  - approval     │                      └──────────────────┘
-└─────────────────┘
-```
+![Database Architecture](architecture.svg)
 
 ## Prerequisites
 

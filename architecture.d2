@@ -1,0 +1,88 @@
+PostgreSQL: {
+  style: {
+    stroke: "#336699"
+    fill: "#E6F2FF"
+  }
+
+  pc_schema: "Schema: pc" {
+    product: sql_table {
+      id: "UUID PK"
+      name_id: "UUID FK"
+      sku: "VARCHAR"
+      price: "DECIMAL"
+      created_at: "TIMESTAMP"
+      updated_at: "TIMESTAMP"
+    }
+  }
+
+  i18n_schema: "Schema: i18n" {
+    localized_string: sql_table {
+      id: "UUID PK"
+      code: "VARCHAR UNQ"
+    }
+
+    translation: sql_table {
+      id: "UUID PK"
+      localized_string_id: "UUID FK"
+      language: "VARCHAR"
+      translation: "TEXT"
+    }
+
+    approval: sql_table {
+      id: "UUID PK"
+      translation_id: "UUID FK"
+      approved_by: "UUID"
+      approved_at: "TIMESTAMP"
+    }
+  }
+}
+
+Materialize: {
+  style: {
+    stroke: "#8B4789"
+    fill: "#FFE6FF"
+  }
+
+  materialized_product: "Materialized View: materialized_product" {
+    shape: sql_table
+    id: "UUID"
+    sku: "VARCHAR"
+    price: "DECIMAL"
+    created_at: "TIMESTAMP"
+    updated_at: "TIMESTAMP"
+    name_id: "UUID"
+    name_code: "VARCHAR"
+    localized_names: "JSONB"
+  }
+}
+
+# Foreign Key Relationships
+PostgreSQL.pc_schema.product.name_id -> PostgreSQL.i18n_schema.localized_string.id: {
+  style: {
+    stroke: "#4169E1"
+    stroke-width: 2
+  }
+}
+
+PostgreSQL.i18n_schema.translation.localized_string_id -> PostgreSQL.i18n_schema.localized_string.id: {
+  style: {
+    stroke: "#4169E1"
+    stroke-width: 2
+  }
+}
+
+PostgreSQL.i18n_schema.approval.translation_id -> PostgreSQL.i18n_schema.translation.id: {
+  style: {
+    stroke: "#4169E1"
+    stroke-width: 2
+  }
+}
+
+# CDC Connection
+PostgreSQL -> Materialize: "CDC" {
+  style: {
+    stroke: "#FF6347"
+    stroke-width: 3
+    stroke-dash: 5
+  }
+}
