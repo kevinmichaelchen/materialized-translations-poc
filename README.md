@@ -45,23 +45,42 @@ where:
 3. **Set up PostgreSQL replication:**
 
    ```bash
-   # Wait for PostgreSQL to be ready
+   # Create publication for CDC
    docker exec -i postgres_db psql -U postgres -d product_catalog < postgres-publication.sql
-
-   # Restart PostgreSQL to apply replication settings
-   docker-compose restart postgres
+   
+   # Set replica identity for all tables
+   docker exec -i postgres_db psql -U postgres -d product_catalog < postgres-replica-identity.sql
    ```
 
 4. **Configure Materialize:**
 
    ```bash
-   # Wait for Materialize to be ready
+   # Wait for Materialize to be ready (about 10 seconds)
+   sleep 10
+   
+   # Set up Materialize connection and views
    docker exec -i materialize_db psql -U materialize -p 6875 -h localhost < materialize-setup.sql
    ```
 
-5. **Verify the setup:**
+5. **Load sample data (optional):**
+
    ```bash
-   docker exec -it materialize_db psql -U materialize -p 6875 -h localhost -c "SELECT * FROM materialized_product;"
+   # Insert sample products with translations
+   docker exec -i postgres_db psql -U postgres -d product_catalog < insert-products.sql
+   ```
+
+6. **Verify the setup:**
+
+   ```bash
+   # View all products with their translations
+   docker exec -i materialize_db psql -U materialize -p 6875 -h localhost -c \
+     "SELECT sku, price, name_code, jsonb_array_length(localized_names) as translation_count 
+      FROM materialized_product ORDER BY sku LIMIT 5;"
+   
+   # View a specific product with full translation details
+   docker exec -i materialize_db psql -U materialize -p 6875 -h localhost -c \
+     "SELECT sku, price, jsonb_pretty(localized_names) as translations 
+      FROM materialized_product WHERE sku = 'SHP-001';"
    ```
 
 ## Database Schema

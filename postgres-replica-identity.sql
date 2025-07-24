@@ -1,0 +1,5 @@
+-- Set replica identity to FULL for all tables
+ALTER TABLE pc.product REPLICA IDENTITY FULL;
+ALTER TABLE i18n.localized_string REPLICA IDENTITY FULL;
+ALTER TABLE i18n.translation REPLICA IDENTITY FULL;
+ALTER TABLE i18n.approval REPLICA IDENTITY FULL;
