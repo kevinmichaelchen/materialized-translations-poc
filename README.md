@@ -8,6 +8,8 @@ A product's name will differ from English, to Spanish, to French.
 
 ## Overview
 
+![Database Architecture](architecture.svg)
+
 This project showcases a pattern for handling multilingual product catalogs
 where:
 
@@ -17,10 +19,6 @@ where:
   structure for efficient querying
 - Changes to source data are automatically reflected in the materialized view
   via CDC (Change Data Capture)
-
-## Architecture
-
-![Database Architecture](architecture.svg)
 
 ## Prerequisites
 
@@ -47,7 +45,7 @@ where:
    ```bash
    # Create publication for CDC
    docker exec -i postgres_db psql -U postgres -d product_catalog < postgres-publication.sql
-   
+
    # Set replica identity for all tables
    docker exec -i postgres_db psql -U postgres -d product_catalog < postgres-replica-identity.sql
    ```
@@ -57,7 +55,7 @@ where:
    ```bash
    # Wait for Materialize to be ready (about 10 seconds)
    sleep 10
-   
+
    # Set up Materialize connection and views
    docker exec -i materialize_db psql -U materialize -p 6875 -h localhost < materialize-setup.sql
    ```
@@ -74,14 +72,39 @@ where:
    ```bash
    # View all products with their translations
    docker exec -i materialize_db psql -U materialize -p 6875 -h localhost -c \
-     "SELECT sku, price, name_code, jsonb_array_length(localized_names) as translation_count 
+     "SELECT sku, price, name_code, jsonb_array_length(localized_names) as translation_count
       FROM materialized_product ORDER BY sku LIMIT 5;"
-   
+
    # View a specific product with full translation details
    docker exec -i materialize_db psql -U materialize -p 6875 -h localhost -c \
-     "SELECT sku, price, jsonb_pretty(localized_names) as translations 
+     "SELECT sku, price, jsonb_pretty(localized_names) as translations
       FROM materialized_product WHERE sku = 'SHP-001';"
    ```
+
+Returns the localized strings in JSON format:
+
+```json
+[
+  {
+    "approved_at": "2025-06-28 10:41:02.300782+00",
+    "approved_by": "c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a31",
+    "language": "en",
+    "translation": "Shampoo"
+  },
+  {
+    "approved_at": null,
+    "approved_by": null,
+    "language": "es",
+    "translation": "Champú"
+  },
+  {
+    "approved_at": null,
+    "approved_by": null,
+    "language": "fr",
+    "translation": "Shampooing"
+  }
+]
+```
 
 ## Database Schema
 
