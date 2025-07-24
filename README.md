@@ -8,8 +8,6 @@ A product's name will differ from English, to Spanish, to French.
 
 ## Overview
 
-![Database Architecture](architecture.svg)
-
 This project showcases a pattern for handling multilingual product catalogs
 where:
 
@@ -109,6 +107,8 @@ Returns the localized strings in JSON format:
 ## Database Schema
 
 ### PostgreSQL Schemas
+
+![Database Architecture](architecture.svg)
 
 #### `pc` (Product Catalog) Schema
 
