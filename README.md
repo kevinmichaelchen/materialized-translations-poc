@@ -2,7 +2,9 @@
 
 A proof of concept demonstrating how to use
 [Materialize](https://materialize.com/) to create real-time materialized views
-of internationalized product data with PostgreSQL as the source database.
+of _internationalized_ product data with PostgreSQL as the source database.
+
+A product's name will differ from English, to Spanish, to French.
 
 ## Overview
 

@@ -4,35 +4,35 @@ PostgreSQL: {
     fill: "#E6F2FF"
   }
 
-  pc_schema: "Schema: pc" {
-    product: sql_table {
-      id: "UUID PK"
-      name_id: "UUID FK"
-      sku: "VARCHAR"
-      price: "DECIMAL"
-      created_at: "TIMESTAMP"
-      updated_at: "TIMESTAMP"
+  pc: "Schema: pc" {
+    product: {
+      shape: sql_table
+      id: uuid {constraint: primary_key}
+      name_id: uuid {constraint: foreign_key}
     }
   }
 
-  i18n_schema: "Schema: i18n" {
-    localized_string: sql_table {
-      id: "UUID PK"
-      code: "VARCHAR UNQ"
+  i18n: "Schema: i18n" {
+    localized_string: {
+      shape: sql_table
+      id: uuid {constraint: primary_key}
+      code: varchar {constraint: unique}
     }
 
-    translation: sql_table {
-      id: "UUID PK"
-      localized_string_id: "UUID FK"
-      language: "VARCHAR"
-      translation: "TEXT"
+    translation: {
+      shape: sql_table
+      id: uuid {constraint: primary_key}
+      localized_string_id: uuid {constraint: foreign_key}
+      language: varchar
+      translation: text
     }
 
-    approval: sql_table {
-      id: "UUID PK"
-      translation_id: "UUID FK"
-      approved_by: "UUID"
-      approved_at: "TIMESTAMP"
+    approval: {
+      shape: sql_table
+      id: uuid {constraint: primary_key}
+      translation_id: uuid {constraint: foreign_key}
+      approved_by: uuid
+      approved_at: timestamp with time zone
     }
   }
 }
@@ -45,33 +45,28 @@ Materialize: {
 
   materialized_product: "Materialized View: materialized_product" {
     shape: sql_table
-    id: "UUID"
-    sku: "VARCHAR"
-    price: "DECIMAL"
-    created_at: "TIMESTAMP"
-    updated_at: "TIMESTAMP"
-    name_id: "UUID"
-    name_code: "VARCHAR"
-    localized_names: "JSONB"
+    id: uuid {constraint: primary_key}
+    name_id: uuid {constraint: foreign_key}
+    localized_names: jsonb
   }
 }
 
 # Foreign Key Relationships
-PostgreSQL.pc_schema.product.name_id -> PostgreSQL.i18n_schema.localized_string.id: {
+PostgreSQL.pc.product.name_id -> PostgreSQL.i18n.localized_string.id: {
   style: {
     stroke: "#4169E1"
     stroke-width: 2
   }
 }
 
-PostgreSQL.i18n_schema.translation.localized_string_id -> PostgreSQL.i18n_schema.localized_string.id: {
+PostgreSQL.i18n.translation.localized_string_id -> PostgreSQL.i18n.localized_string.id: {
   style: {
     stroke: "#4169E1"
     stroke-width: 2
   }
 }
 
-PostgreSQL.i18n_schema.approval.translation_id -> PostgreSQL.i18n_schema.translation.id: {
+PostgreSQL.i18n.approval.translation_id -> PostgreSQL.i18n.translation.id: {
   style: {
     stroke: "#4169E1"
     stroke-width: 2
