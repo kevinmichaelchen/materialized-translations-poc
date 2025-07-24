@@ -23,6 +23,9 @@ Deliver **1000x performance** for read-heavy workloads with fresh data
 </div>
 
 <div class="abs-br m-6 text-xl">
+  <a href="https://github.com/kevinmichaelchen/materialized-translations-poc" target="_blank" class="slidev-icon-btn">
+    <carbon:logo-github />
+  </a>
   <a href="https://materialize.com" target="_blank" class="slidev-icon-btn">
     <carbon:link />
   </a>
