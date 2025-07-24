@@ -25,6 +25,15 @@ This is a Slidev presentation showcasing the benefits of Materialize's Increment
 ## Deployment
 
 ### GitHub Pages
+The project includes a GitHub Actions workflow that automatically builds and deploys the presentation to GitHub Pages on every push to the main branch.
+
+1. Enable GitHub Pages in your repository settings:
+   - Go to Settings → Pages
+   - Select "Deploy from a GitHub Actions artifact" as the source
+   
+2. The slides will be available at: `https://<username>.github.io/<repository-name>/`
+
+### Netlify
 The project includes a `netlify.toml` configuration for easy deployment.
 
 ### Vercel

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "slidev build",
+    "build:gh-pages": "slidev build --base /materialized-translations-poc/",
     "dev": "slidev --open",
     "export": "slidev export"
   },
